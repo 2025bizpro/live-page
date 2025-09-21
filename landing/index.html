@@ -7,12 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // 환경 변수 설정 (배포 시 실제 값으로 교체)
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbySjBJgQgiXvFNOVRncQnYFOn_bPQOm5MLN_BQXH64QZQuYIZ39xluvvSq3A29lOqtpuw/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxz5m6JWXSvq56WBESRMWl1ngXFww9bfd2I5gvEblKRzJrWrgoaRWO9bV-kmBMw-2mZNQ/exec";
         const SHARED_SECRET = "frontend_backend_shared_secret";
         
         // 강사 정보 설정 (각 강사별로 수정 필요)
         const INSTRUCTOR_NAME = "캐시루트"; // 예: "캐시루트", "사뚜", "김메타강사"
-        const INSTRUCTOR_ID = "s"; // 예: "cashroot", "sattu", "kimmeta"
+        const INSTRUCTOR_ID = "cashroot"; // 예: "cashroot", "sattu", "kimmeta"
         
         // 개발 모드 설정 (로컬 테스트용)
         const IS_DEVELOPMENT = window.location.hostname === '127.0.0.1' || 
@@ -355,6 +355,52 @@
             return phone.replace(/[^0-9]/g, '');
         }
 
+        // JSONP 방식으로 폼 제출
+        function submitViaJsonp(formData) {
+            return new Promise((resolve, reject) => {
+                // JSONP 콜백 함수 생성
+                const callbackName = 'jsonpCallback_' + Date.now();
+                
+                // 전역 콜백 함수 등록
+                window[callbackName] = function(result) {
+                    // 정리
+                    delete window[callbackName];
+                    document.head.removeChild(script);
+                    
+                    if (result && result.ok) {
+                        resolve(true);
+                    } else {
+                        reject(new Error(result?.detail || 'JSONP 전송 실패'));
+                    }
+                };
+
+                // 스크립트 태그 생성
+                const script = document.createElement('script');
+                const params = new URLSearchParams({
+                    callback: callbackName,
+                    data: JSON.stringify(formData)
+                });
+                
+                script.src = `${WEB_APP_URL}?${params.toString()}`;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    document.head.removeChild(script);
+                    reject(new Error('JSONP 스크립트 로드 실패'));
+                };
+
+                // 타임아웃 설정
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        document.head.removeChild(script);
+                        reject(new Error('JSONP 타임아웃'));
+                    }
+                }, 10000);
+
+                document.head.appendChild(script);
+            });
+        }
+
         // 폼 제출 함수
         async function submitForm() {
             if (!validateForm()) {
@@ -383,29 +429,47 @@
                     secret: SHARED_SECRET
                 };
 
-                // 개발 모드에서는 Origin 헤더 추가
-                const headers = {
-                    'Content-Type': 'application/json',
-                };
-                
-                if (IS_DEVELOPMENT) {
-                    headers['Origin'] = window.location.origin;
+                // CORS 문제 해결을 위한 다중 접근 방식
+                let success = false;
+                let errorMessage = '';
+
+                // 방법 1: 직접 fetch 시도
+                try {
+                    const response = await fetch(WEB_APP_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.ok) {
+                        success = true;
+                        window.location.assign('./success.html');
+                    } else {
+                        errorMessage = result.detail || '신청 중 오류가 발생했습니다.';
+                    }
+                } catch (fetchError) {
+                    console.warn('직접 fetch 실패, 대안적 방법 시도:', fetchError);
+                    
+                    // 방법 2: JSONP 방식으로 시도
+                    try {
+                        success = await submitViaJsonp(formData);
+                        if (success) {
+                            window.location.assign('./success.html');
+                        } else {
+                            errorMessage = 'JSONP 방식으로도 전송에 실패했습니다.';
+                        }
+                    } catch (jsonpError) {
+                        console.error('JSONP 방식도 실패:', jsonpError);
+                        errorMessage = '모든 전송 방법이 실패했습니다. 잠시 후 다시 시도해주세요.';
+                    }
                 }
 
-                const response = await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify(formData)
-                });
-
-                const result = await response.json();
-
-                if (result.ok) {
-                    // 성공 시 완료 페이지로 이동
-                    window.location.assign('./success.html');
-                } else {
-                    // 실패 시 에러 메시지 표시
-                    showToast(result.detail || '신청 중 오류가 발생했습니다. 다시 시도해주세요.');
+                if (!success) {
+                    showToast(errorMessage);
                 }
             } catch (error) {
                 console.error('Submit error:', error);
@@ -507,6 +571,7 @@
             const imageGallery = document.getElementById('beforeForm');
             let imageNumber = 1;
             let hasMoreImages = true;
+            let loadedCount = 0;
             
             while (hasMoreImages) {
                 const imagePath = `./images/${String(imageNumber).padStart(3, '0')}.png`;
@@ -521,6 +586,7 @@
                         img.alt = `무료 라이브 초대 이미지 ${imageNumber}`;
                         img.className = 'gallery-image';
                         imageGallery.appendChild(img);
+                        loadedCount++;
                         imageNumber++;
                     } else {
                         // 이미지가 없으면 종료
@@ -528,11 +594,12 @@
                     }
                 } catch (error) {
                     // 네트워크 오류나 파일이 없으면 종료
+                    console.warn(`이미지 로딩 실패: ${imagePath}`, error);
                     hasMoreImages = false;
                 }
             }
             
-            console.log(`총 ${imageNumber - 1}개의 이미지가 로드되었습니다.`);
+            console.log(`총 ${loadedCount}개의 이미지가 로드되었습니다.`);
         }
 
         // 페이지 로드 시 이미지 로딩 및 포커스 설정
