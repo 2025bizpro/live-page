@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김메타강사 무료 라이브 사전등록</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // 환경 변수 설정 (배포 시 실제 값으로 교체)
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbweDyn9tYBcmtlUwwMv_faV3CELPx8l3IEFObyT_tdXRz2zs53QfQ2iZNOkUpfYSTR7Nw/exec";
+        const SHARED_SECRET = "frontend_backend_shared_secret";
+        
+        // 강사 정보 설정 (각 강사별로 수정 필요)
+        const INSTRUCTOR_NAME = "김메타강사"; // 예: "캐시루트", "사뚜", "김메타강사"
+        const INSTRUCTOR_ID = "kimmeta"; // 예: "cashroot", "sattu", "kimmeta"
+        
+    </script>
+    <style>
+        /* 모바일 최적화 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* 메인 컨테이너 */
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        /* 이미지 갤러리 컨테이너 */
+        .image-gallery {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0;
+            font-size: 0;
+            line-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 갤러리 이미지 스타일 */
+        .gallery-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* 폼 컨테이너 */
+        .form-container {
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        /* 로딩 상태 스타일 */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        /* 토스트 알림 스타일 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            max-width: 90%;
+        }
+        
+        /* 플로팅 버튼 스타일 */
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            width: calc(100% - 40px);
+            max-width: 400px;
+            height: 60px;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        /* 폼 영역에서 고정 위치로 변경 */
+        .floating-button.in-form {
+            position: relative !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            transform: none !important;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 20px 0 !important;
+            z-index: 1 !important;
+        }
+        
+        .floating-button a {
+            display: block;
+            background: #318DE7;
+            color: #fff;
+            height: 60px;
+            line-height: 60px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-button a:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .main-container {
+                max-width: 100%;
+                margin: 0;
+            }
+            
+            .form-container {
+                padding: 15px;
+            }
+            
+            .floating-button {
+                width: calc(100% - 30px);
+                bottom: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 10px;
+            }
+            
+            .floating-button {
+                width: calc(100% - 20px);
+                bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="main-container">
+        <!-- 이미지 갤러리 영역 (동적 로딩) -->
+        <div class="image-gallery" id="beforeForm">
+            <!-- 이미지들이 동적으로 로드됩니다 -->
+        </div>
+
+        <!-- 폼 카드 영역 -->
+        <div class="form-container" id="boxAll">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 text-center">사전등록 정보 입력</h2>
+            
+            <form id="registrationForm" class="space-y-4">
+                <!-- 이름 입력 -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
+                        이름 <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name"
+                        required
+                        minlength="2"
+                        maxlength="30"
+                        autocomplete="name"
+                        class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        style="min-height: 44px;"
+                        placeholder="이름을 입력해주세요"
+                    />
+                    <div id="nameError" class="text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <!-- 전화번호 입력 -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+                        전화번호 <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone"
+                        required
+                        pattern="^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                        class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        style="min-height: 44px;"
+                        placeholder="010-1234-5678"
+                    />
+                    <div id="phoneError" class="text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <!-- 개인정보 동의 -->
+                <div class="flex items-start space-x-2">
+                    <input 
+                        type="checkbox" 
+                        id="consent" 
+                        name="consent"
+                        required
+                        class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label for="consent" class="text-sm text-gray-700">
+                        <span class="text-red-500">*</span> 개인정보 수집 및 이용에 동의합니다
+                        <br><span class="text-xs text-gray-500">(이름, 전화번호는 라이브 알림 목적으로만 사용됩니다)</span>
+                    </label>
+                </div>
+                <div id="consentError" class="text-red-500 text-sm hidden"></div>
+
+                <!-- 허니팟 필드 (스팸 방지) -->
+                <input type="text" name="website" style="display: none;" tabindex="-1" autocomplete="off">
+
+                <!-- 폼 내부 제출 버튼 (숨김 처리) -->
+                <button 
+                    type="submit"
+                    id="submitBtn"
+                    class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                    style="display: none; min-height: 44px;"
+                >
+                    무료라이브 신청하기
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 하단 고정 CTA 버튼 -->
+    <div class="floating-button" id="floating-btn">
+        <a href="#boxAll" onclick="event.preventDefault(); document.getElementById('boxAll').scrollIntoView({ behavior: 'smooth' });">
+            무료라이브 신청하기
+        </a>
+    </div>
+    </div>
+
+    <!-- 토스트 알림 -->
+    <div id="toast" class="toast hidden">
+        <div class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+
+    <script>
+        // DOM 요소 참조
+        const form = document.getElementById('registrationForm');
+        const floatingBtnLink = document.querySelector('#floating-btn a');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // 입력 필드 참조
+        const nameInput = document.getElementById('name');
+        const phoneInput = document.getElementById('phone');
+        const consentInput = document.getElementById('consent');
+        const websiteInput = document.querySelector('input[name="website"]');
+
+        // 에러 메시지 요소 참조
+        const nameError = document.getElementById('nameError');
+        const phoneError = document.getElementById('phoneError');
+        const consentError = document.getElementById('consentError');
+
+        // 정규식 패턴
+        const phonePattern = /^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/;
+        const namePattern = /^[가-힣a-zA-Z\s]{2,30}$/;
+
+        // 토스트 메시지 표시 함수
+        function showToast(message) {
+            toastMessage.textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // 에러 메시지 표시 함수
+        function showError(element, message) {
+            element.textContent = message;
+            element.classList.remove('hidden');
+        }
+
+        // 에러 메시지 숨기기 함수
+        function hideError(element) {
+            element.classList.add('hidden');
+        }
+
+        // 입력값 검증 함수
+        function validateForm() {
+            let isValid = true;
+
+            // 이름 검증
+            const name = nameInput.value.trim();
+            if (!name) {
+                showError(nameError, '이름을 입력해주세요.');
+                isValid = false;
+            } else if (!namePattern.test(name)) {
+                showError(nameError, '이름은 2-30자의 한글, 영문, 공백만 입력 가능합니다.');
+                isValid = false;
+            } else {
+                hideError(nameError);
+            }
+
+            // 전화번호 검증
+            const phone = phoneInput.value.trim();
+            if (!phone) {
+                showError(phoneError, '전화번호를 입력해주세요.');
+                isValid = false;
+            } else if (!phonePattern.test(phone)) {
+                showError(phoneError, '올바른 전화번호 형식을 입력해주세요. (예: 010-1234-5678)');
+                isValid = false;
+            } else {
+                hideError(phoneError);
+            }
+
+            // 개인정보 동의 검증
+            if (!consentInput.checked) {
+                showError(consentError, '개인정보 수집 및 이용에 동의해주세요.');
+                isValid = false;
+            } else {
+                hideError(consentError);
+            }
+
+            // 허니팟 검증 (스팸 방지)
+            if (websiteInput.value) {
+                showToast('잘못된 요청입니다.');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // 전화번호 정규화 함수 (숫자만 추출)
+        function normalizePhone(phone) {
+            return phone.replace(/[^0-9]/g, '');
+        }
+
+        // JSONP 방식으로 폼 제출
+        function submitViaJsonp(formData) {
+            return new Promise((resolve, reject) => {
+                // JSONP 콜백 함수 생성
+                const callbackName = 'jsonpCallback_' + Date.now();
+                
+                // 전역 콜백 함수 등록
+                window[callbackName] = function(result) {
+                    // 정리
+                    delete window[callbackName];
+                    document.head.removeChild(script);
+                    
+                    if (result && result.ok) {
+                        resolve(true);
+                    } else {
+                        reject(new Error(result?.detail || 'JSONP 전송 실패'));
+                    }
+                };
+
+                // 스크립트 태그 생성
+                const script = document.createElement('script');
+                const params = new URLSearchParams({
+                    callback: callbackName,
+                    data: JSON.stringify(formData)
+                });
+                
+                script.src = `${WEB_APP_URL}?${params.toString()}`;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    document.head.removeChild(script);
+                    reject(new Error('JSONP 스크립트 로드 실패'));
+                };
+
+                // 타임아웃 설정
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        document.head.removeChild(script);
+                        reject(new Error('JSONP 타임아웃'));
+                    }
+                }, 10000);
+
+                document.head.appendChild(script);
+            });
+        }
+
+        // 폼 제출 함수
+        async function submitForm() {
+            if (!validateForm()) {
+                return;
+            }
+
+
+            // 버튼 로딩 상태로 변경
+            floatingBtnLink.style.pointerEvents = 'none';
+            floatingBtnLink.textContent = '신청 중...';
+            document.body.classList.add('loading');
+
+            try {
+                const formData = {
+                    name: nameInput.value.trim(),
+                    phone: normalizePhone(phoneInput.value.trim()),
+                    consent: consentInput.checked,
+                    instructorName: INSTRUCTOR_NAME,
+                    instructorId: INSTRUCTOR_ID,
+                    secret: SHARED_SECRET
+                };
+
+                // CORS 문제 해결을 위한 다중 접근 방식
+                let success = false;
+                let errorMessage = '';
+
+                // 방법 1: 직접 fetch 시도
+                try {
+                    const response = await fetch(WEB_APP_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.ok) {
+                        success = true;
+                        window.location.assign('./success.html');
+                    } else {
+                        errorMessage = result.detail || '신청 중 오류가 발생했습니다.';
+                    }
+                } catch (fetchError) {
+                    
+                    // 방법 2: JSONP 방식으로 시도
+                    try {
+                        success = await submitViaJsonp(formData);
+                        if (success) {
+                            window.location.assign('./success.html');
+                        } else {
+                            errorMessage = 'JSONP 방식으로도 전송에 실패했습니다.';
+                        }
+                    } catch (jsonpError) {
+                        errorMessage = '모든 전송 방법이 실패했습니다. 잠시 후 다시 시도해주세요.';
+                    }
+                }
+
+                if (!success) {
+                    showToast(errorMessage);
+                }
+            } catch (error) {
+                showToast('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+            } finally {
+                // 버튼 상태 복구
+                floatingBtnLink.style.pointerEvents = 'auto';
+                floatingBtnLink.textContent = '무료라이브 신청하기';
+                document.body.classList.remove('loading');
+            }
+        }
+
+        // 이벤트 리스너 등록
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitForm();
+        });
+
+        // 플로팅 버튼 클릭 시 폼 제출 트리거
+        floatingBtnLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            submitForm();
+        });
+
+        // 실시간 입력 검증
+        nameInput.addEventListener('input', () => {
+            if (nameInput.value.trim()) {
+                hideError(nameError);
+            }
+        });
+
+        phoneInput.addEventListener('input', () => {
+            if (phoneInput.value.trim()) {
+                hideError(phoneError);
+            }
+        });
+
+        consentInput.addEventListener('change', () => {
+            if (consentInput.checked) {
+                hideError(consentError);
+            }
+        });
+
+
+        // 리사이즈 이벤트 리스너 (화면 크기 변경 시)
+        window.addEventListener('resize', () => {
+            updateFloatingButtonVisibility();
+        });
+
+        // 플로팅 버튼 표시/숨김 로직
+        const boxAll = document.getElementById('boxAll');
+        const floatingBtn = document.getElementById('floating-btn');
+        
+        function updateFloatingButtonVisibility() {
+            if (!boxAll || !floatingBtn) return;
+            
+            const boxAllRect = boxAll.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            
+            // 폼 영역이 화면에 보이는지 확인 (더 엄격한 조건)
+            const isFormVisible = boxAllRect.top < windowHeight - 50 && boxAllRect.bottom > 50;
+            
+            if (isFormVisible) {
+                // 폼 영역이 화면에 보이면 버튼을 폼 내부로 이동
+                if (!floatingBtn.classList.contains('in-form')) {
+                    floatingBtn.classList.add('in-form');
+                    // 버튼을 폼의 마지막에 추가
+                    const form = document.getElementById('registrationForm');
+                    if (form) {
+                        form.appendChild(floatingBtn);
+                    }
+                }
+            } else {
+                // 폼 영역이 화면에서 벗어나면 버튼을 다시 플로팅으로
+                if (floatingBtn.classList.contains('in-form')) {
+                    floatingBtn.classList.remove('in-form');
+                    // 버튼을 body로 다시 이동
+                    document.body.appendChild(floatingBtn);
+                }
+            }
+        }
+        
+        // 스크롤 이벤트 리스너 (플로팅 버튼)
+        window.addEventListener('scroll', () => {
+            updateFloatingButtonVisibility();
+        });
+        
+        // 초기 상태 설정
+        updateFloatingButtonVisibility();
+
+        // 동적 이미지 로딩 함수
+        async function loadImages() {
+            const imageGallery = document.getElementById('beforeForm');
+            let imageNumber = 1;
+            let hasMoreImages = true;
+            let loadedCount = 0;
+            
+            while (hasMoreImages) {
+                const imagePath = `./images/${String(imageNumber).padStart(3, '0')}.png`;
+                
+                // 이미지 존재 여부 확인
+                try {
+                    const response = await fetch(imagePath, { method: 'HEAD' });
+                    if (response.ok) {
+                        // 이미지가 존재하면 추가
+                        const img = document.createElement('img');
+                        img.src = imagePath;
+                        img.alt = `무료 라이브 초대 이미지 ${imageNumber}`;
+                        img.className = 'gallery-image';
+                        imageGallery.appendChild(img);
+                        loadedCount++;
+                        imageNumber++;
+                    } else {
+                        // 이미지가 없으면 종료
+                        hasMoreImages = false;
+                    }
+                } catch (error) {
+                    // 네트워크 오류나 파일이 없으면 종료
+                    hasMoreImages = false;
+                }
+            }
+            
+        }
+
+        // 페이지 로드 시 이미지 로딩 및 포커스 설정
+        window.addEventListener('load', async () => {
+            await loadImages();
+            nameInput.focus();
+        });
+    </script>
+</body>
+</html>
