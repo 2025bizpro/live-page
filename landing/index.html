@@ -14,11 +14,6 @@
         const INSTRUCTOR_NAME = "캐시루트"; // 예: "캐시루트", "사뚜", "김메타강사"
         const INSTRUCTOR_ID = "cashroot"; // 예: "cashroot", "sattu", "kimmeta"
         
-        // 개발 모드 설정 (로컬 테스트용)
-        const IS_DEVELOPMENT = window.location.hostname === '127.0.0.1' || 
-                              window.location.hostname === 'localhost' ||
-                              window.location.hostname.includes('192.168.') ||
-                              window.location.hostname.includes('10.0.');
     </script>
     <style>
         /* 모바일 최적화 스타일 */
@@ -407,12 +402,6 @@
                 return;
             }
 
-            // 개발 모드에서 GAS URL이 설정되지 않은 경우
-            if (IS_DEVELOPMENT && WEB_APP_URL.includes('XXXX')) {
-                showToast('개발 모드: GAS Web App URL을 설정해주세요.');
-                console.log('개발 모드 - GAS Web App URL 설정 필요:', WEB_APP_URL);
-                return;
-            }
 
             // 버튼 로딩 상태로 변경
             floatingBtnLink.style.pointerEvents = 'none';
@@ -452,7 +441,6 @@
                         errorMessage = result.detail || '신청 중 오류가 발생했습니다.';
                     }
                 } catch (fetchError) {
-                    console.warn('직접 fetch 실패, 대안적 방법 시도:', fetchError);
                     
                     // 방법 2: JSONP 방식으로 시도
                     try {
@@ -463,7 +451,6 @@
                             errorMessage = 'JSONP 방식으로도 전송에 실패했습니다.';
                         }
                     } catch (jsonpError) {
-                        console.error('JSONP 방식도 실패:', jsonpError);
                         errorMessage = '모든 전송 방법이 실패했습니다. 잠시 후 다시 시도해주세요.';
                     }
                 }
@@ -472,14 +459,7 @@
                     showToast(errorMessage);
                 }
             } catch (error) {
-                console.error('Submit error:', error);
-                
-                // 개발 모드에서 더 자세한 오류 정보 제공
-                if (IS_DEVELOPMENT) {
-                    showToast(`개발 모드 오류: ${error.message}. GAS Web App이 배포되었는지 확인해주세요.`);
-                } else {
-                    showToast('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
-                }
+                showToast('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
             } finally {
                 // 버튼 상태 복구
                 floatingBtnLink.style.pointerEvents = 'auto';
@@ -594,12 +574,10 @@
                     }
                 } catch (error) {
                     // 네트워크 오류나 파일이 없으면 종료
-                    console.warn(`이미지 로딩 실패: ${imagePath}`, error);
                     hasMoreImages = false;
                 }
             }
             
-            console.log(`총 ${loadedCount}개의 이미지가 로드되었습니다.`);
         }
 
         // 페이지 로드 시 이미지 로딩 및 포커스 설정
