@@ -6,12 +6,46 @@
     <title>사전등록 완료</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 전체 화면 이미지 표시를 위한 스타일 */
-        .fullscreen-image {
-            width: 100vw;
+        /* 모바일 최적화 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* 메인 컨테이너 - PC에서 최대 너비 제한 */
+        .main-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* 이미지 컨테이너 */
+        .image-container {
+            width: 100%;
             height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        /* 이미지 스타일 */
+        .success-image {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             object-position: center;
+            display: block;
         }
         
         /* 모바일에서 안전 영역 고려 */
@@ -21,18 +55,46 @@
             padding-left: env(safe-area-inset-left);
             padding-right: env(safe-area-inset-right);
         }
+        
+        /* PC에서 좌우 여백 추가 */
+        @media (min-width: 481px) {
+            .main-container {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                margin: 20px auto;
+                min-height: calc(100vh - 40px);
+            }
+            
+            .image-container {
+                height: calc(100vh - 40px);
+            }
+        }
+        
+        /* 모바일에서는 전체 화면 */
+        @media (max-width: 480px) {
+            .main-container {
+                max-width: 100%;
+                margin: 0;
+                min-height: 100vh;
+            }
+            
+            .image-container {
+                height: 100vh;
+            }
+        }
     </style>
 </head>
-<body class="m-0 p-0 overflow-hidden">
-    <!-- 완료 이미지 (화면 전체) -->
-    <div class="w-full h-screen flex items-center justify-center safe-area">
-        <a href="https://open.kakao.com/o/your-openchat-link2" target="_blank" rel="noopener noreferrer">
-            <img 
-                src="./images/success.png" 
-                alt="사전등록이 완료되었습니다. 오픈채팅방에 참여해주세요."
-                class="fullscreen-image"
-            />
-        </a>
+<body>
+    <div class="main-container">
+        <!-- 완료 이미지 -->
+        <div class="image-container safe-area">
+            <a href="https://open.kakao.com/o/your-openchat-link2" target="_blank" rel="noopener noreferrer">
+                <img 
+                    src="./images/success.png" 
+                    alt="사전등록이 완료되었습니다. 오픈채팅방에 참여해주세요."
+                    class="success-image"
+                />
+            </a>
+        </div>
     </div>
 </body>
 </html>
