@@ -222,6 +222,13 @@
                     />
                     <label for="consent" class="text-sm text-gray-700">
                         <span class="text-red-500">*</span> 개인정보 수집 및 이용에 동의합니다
+                        <button 
+                            type="button" 
+                            id="privacyBtn"
+                            class="ml-1 text-xs text-blue-600 hover:text-blue-800 underline"
+                        >
+                            자세히보기
+                        </button>
                         <br><span class="text-xs text-gray-500">(이름, 전화번호는 라이브 알림 목적으로만 사용됩니다)</span>
                     </label>
                 </div>
@@ -257,6 +264,48 @@
     <div id="toast" class="toast hidden">
         <div class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
             <span id="toastMessage"></span>
+        </div>
+    </div>
+
+    <!-- 개인정보취급방침 모달 -->
+    <div id="privacyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full max-h-96 overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">개인정보취급방침</h3>
+                        <button 
+                            id="closePrivacyModal"
+                            class="text-gray-500 hover:text-gray-700 text-xl"
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <div class="text-sm text-gray-700 space-y-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">가. 수집하는 개인정보 항목 및 수집방법</h4>
+                            <p>- 신청자 이름, 핸드폰</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">나. 개인정보의 수집 및 이용목적</h4>
+                            <p>수집한 개인정보를 다음의 목적을 위해 활용합니다.</p>
+                            <p>- 혜택 및 이벤트 알림</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">다. 수집한 개인정보의 보유 및 이용기간</h4>
+                            <p>- 원칙적으로 개인정보 수집 및 이용목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다.</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <button 
+                            id="closePrivacyModalBtn"
+                            class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700"
+                        >
+                            확인
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -581,6 +630,41 @@
             }
             
         }
+
+        // 개인정보취급방침 모달 관련
+        const privacyBtn = document.getElementById('privacyBtn');
+        const privacyModal = document.getElementById('privacyModal');
+        const closePrivacyModal = document.getElementById('closePrivacyModal');
+        const closePrivacyModalBtn = document.getElementById('closePrivacyModalBtn');
+
+        // 모달 열기
+        privacyBtn.addEventListener('click', () => {
+            privacyModal.classList.remove('hidden');
+        });
+
+        // 모달 닫기 (X 버튼)
+        closePrivacyModal.addEventListener('click', () => {
+            privacyModal.classList.add('hidden');
+        });
+
+        // 모달 닫기 (확인 버튼)
+        closePrivacyModalBtn.addEventListener('click', () => {
+            privacyModal.classList.add('hidden');
+        });
+
+        // 모달 배경 클릭 시 닫기
+        privacyModal.addEventListener('click', (e) => {
+            if (e.target === privacyModal) {
+                privacyModal.classList.add('hidden');
+            }
+        });
+
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !privacyModal.classList.contains('hidden')) {
+                privacyModal.classList.add('hidden');
+            }
+        });
 
         // 페이지 로드 시 이미지 로딩 및 포커스 설정
         window.addEventListener('load', async () => {
