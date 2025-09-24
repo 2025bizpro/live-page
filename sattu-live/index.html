@@ -30,6 +30,11 @@
             background-color: #f5f5f5;
             margin: 0;
             padding: 0;
+            scroll-behavior: auto;
+        }
+        
+        html {
+            scroll-behavior: auto;
         }
         
         /* 메인 컨테이너 */
@@ -666,17 +671,40 @@
             }
         });
 
-        // DOM 로드 시 즉시 스크롤을 최상단으로 설정
+        // 페이지 로드 시 즉시 스크롤을 최상단으로 설정 (여러 방법으로 강제)
         document.addEventListener('DOMContentLoaded', () => {
+            // 즉시 스크롤
             window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
         });
 
         // 페이지 로드 시 이미지 로딩 및 포커스 설정
         window.addEventListener('load', async () => {
-            // 페이지 최상단으로 스크롤 (이중 보장)
+            // 페이지 최상단으로 스크롤 (강제)
             window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            
+            // 약간의 지연 후 다시 한번 확인
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }, 100);
+            
             await loadImages();
             nameInput.focus();
+        });
+
+        // 페이지 히스토리 복원 시에도 스크롤 위치 제어
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                // 뒤로가기/앞으로가기 시에도 최상단으로
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }
         });
     </script>
 </body>
