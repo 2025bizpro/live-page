@@ -666,8 +666,15 @@
             }
         });
 
+        // DOM 로드 시 즉시 스크롤을 최상단으로 설정
+        document.addEventListener('DOMContentLoaded', () => {
+            window.scrollTo(0, 0);
+        });
+
         // 페이지 로드 시 이미지 로딩 및 포커스 설정
         window.addEventListener('load', async () => {
+            // 페이지 최상단으로 스크롤 (이중 보장)
+            window.scrollTo(0, 0);
             await loadImages();
             nameInput.focus();
         });
