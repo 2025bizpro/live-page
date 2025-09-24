@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="scroll-restoration" content="manual">
     <title>사뚜 무료 라이브 사전등록</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -671,41 +672,63 @@
             }
         });
 
-        // 페이지 로드 시 즉시 스크롤을 최상단으로 설정 (여러 방법으로 강제)
-        document.addEventListener('DOMContentLoaded', () => {
-            // 즉시 스크롤
+        // 강력한 스크롤 제어 함수
+        function forceScrollToTop() {
             window.scrollTo(0, 0);
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
+            document.documentElement.scrollLeft = 0;
+            document.body.scrollLeft = 0;
+        }
+
+        // 즉시 실행 (스크립트 로드 즉시)
+        forceScrollToTop();
+
+        // DOM 로드 시
+        document.addEventListener('DOMContentLoaded', () => {
+            forceScrollToTop();
         });
 
         // 페이지 로드 시 이미지 로딩 및 포커스 설정
         window.addEventListener('load', async () => {
-            // 페이지 최상단으로 스크롤 (강제)
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
+            forceScrollToTop();
             
-            // 약간의 지연 후 다시 한번 확인
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-            }, 100);
+            // 여러 번 반복하여 확실하게
+            setTimeout(() => forceScrollToTop(), 50);
+            setTimeout(() => forceScrollToTop(), 100);
+            setTimeout(() => forceScrollToTop(), 200);
+            setTimeout(() => forceScrollToTop(), 500);
             
             await loadImages();
+            
+            // 이미지 로드 후에도 다시 확인
+            forceScrollToTop();
+            setTimeout(() => forceScrollToTop(), 100);
+            
             nameInput.focus();
         });
 
         // 페이지 히스토리 복원 시에도 스크롤 위치 제어
         window.addEventListener('pageshow', (event) => {
-            if (event.persisted) {
-                // 뒤로가기/앞으로가기 시에도 최상단으로
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
+            forceScrollToTop();
+            setTimeout(() => forceScrollToTop(), 100);
+        });
+
+        // 스크롤 이벤트 감지하여 강제로 최상단 유지 (초기 로딩 중에만)
+        let isInitialLoad = true;
+        window.addEventListener('scroll', () => {
+            if (isInitialLoad) {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > 0) {
+                    forceScrollToTop();
+                }
             }
         });
+
+        // 3초 후에는 스크롤 제어 해제
+        setTimeout(() => {
+            isInitialLoad = false;
+        }, 3000);
     </script>
 </body>
 </html>
