@@ -28,6 +28,17 @@
         const INSTRUCTOR_NAME = "사뚜"; // 예: "캐시루트", "사뚜", "김메타강사"
         const INSTRUCTOR_ID = "sattu"; // 예: "cashroot", "sattu", "kimmeta"
         
+        // 페이지 로드 시점의 referrer 저장 (나중에 폼 제출 시 사용)
+        let initialReferrer = document.referrer || 'direct';
+        
+        // 페이지가 완전히 로드되기 전에도 한 번 더 확인
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.referrer) {
+                initialReferrer = document.referrer;
+            }
+            console.log('Initial referrer captured:', initialReferrer);
+        });
+        
     </script>
     <style>
         /* 모바일 최적화 스타일 */
@@ -486,11 +497,10 @@
             document.body.classList.add('loading');
 
             try {
-                // 이전 URL 정보를 그대로 저장 (직접 방문이든 뭐든 이전 URL이 있으면 사용)
-                const documentReferrer = document.referrer;
+                // 페이지 로드 시점에서 저장한 초기 referrer 사용
+                const finalReferrer = initialReferrer || document.referrer || 'direct';
                 
-                // document.referrer가 있으면 그것을 그대로 사용하고, 없으면 'direct' 표시
-                const finalReferrer = documentReferrer || 'direct';
+                console.log('Using referrer for form submission:', finalReferrer);
                 
                 const formData = {
                     name: nameInput.value.trim(),
@@ -499,7 +509,7 @@
                     instructorName: INSTRUCTOR_NAME,
                     instructorId: INSTRUCTOR_ID,
                     secret: SHARED_SECRET,
-                    referrer: finalReferrer  // 서버로 이전 사이트 URL 전송
+                    referrer: finalReferrer  // 서버로 랜딩페이지 유입 시점의 이전 사이트 URL 전송
                 };
 
                 // CORS 문제 해결을 위한 다중 접근 방식
