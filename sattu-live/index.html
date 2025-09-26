@@ -21,85 +21,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // 환경 변수 설정 (배포 시 실제 값으로 교체)
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxN3XVPU4OA1k60rsN-_98GEEStlbNpHNx6mK2AkyvKdjdOjoq6EtlgP3ZkYTcBbcdU4g/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyrVYnfSP2KDruKwdrSOMBJ0xzDM3NRtHc6l4W3ZnbwZDx6HZcTMvCcCcyZdeY-BkxuNQ/exec";
         const SHARED_SECRET = "frontend_backend_shared_secret";
         
         // 강사 정보 설정 (각 강사별로 수정 필요)
         const INSTRUCTOR_NAME = "사뚜"; // 예: "캐시루트", "사뚜", "김메타강사"
         const INSTRUCTOR_ID = "sattu"; // 예: "cashroot", "sattu", "kimmeta"
-        
-        // 광고 소스 판별 함수
-        function getAdSource() {
-            const referrer = document.referrer || '';
-            const urlParams = new URLSearchParams(window.location.search);
-            const utmSource = urlParams.get('utm_source') || '';
-            const utmMedium = urlParams.get('utm_medium') || '';
-            const utmCampaign = urlParams.get('utm_campaign') || '';
-            const fbclid = urlParams.get('fbclid') || '';
-            const gclid = urlParams.get('gclid') || '';
-            
-            // 구글 광고 ID 확인
-            if (gclid) {
-                return 'google_ads';
-            }
-            
-            // 페이스북/인스타그램 메타 광고 ID 확인
-            if (fbclid) {
-                return 'meta_ads';
-            }
-            
-            // UTM 파라미터 확인
-            if (utmSource && utmMedium) {
-                if (utmSource.toLowerCase().includes('google') && 
-                    (utmMedium.toLowerCase().includes('cpc') || 
-                     utmMedium.toLowerCase().includes('display') ||
-                     utmMedium.toLowerCase().includes('search'))) {
-                    return 'google_ads';
-                }
-                if (utmSource.toLowerCase().includes('facebook') || 
-                    utmSource.toLowerCase().includes('instagram') ||
-                    utmSource.toLowerCase().includes('meta')) {
-                    return 'meta_ads';
-                }
-            }
-            
-            // 구글 도메인에서 오는 리퍼럴 확인
-            if (referrer.includes('google.com') && utmSource) {
-                return 'google_ads';
-            }
-            
-            // Direct나 기타 소스
-            return referrer ? 'referral' : 'direct';
-        }
-        
-        // GTM으로 광고 소스 정보 전송
-        function trackAdSource() {
-            const adSource = getAdSource();
-            const referrer = document.referrer || 'direct';
-            const currentUrl = window.location.href;
-            
-            // GTM dataLayer에 이벤트 푸시
-            if (typeof dataLayer !== 'undefined') {
-                dataLayer.push({
-                    'event': 'page_view',
-                    'page_location': currentUrl,
-                    'page_referrer': referrer,
-                    'ad_source': adSource,
-                    'utm_source': new URLSearchParams(window.location.search).get('utm_source') || '',
-                    'utm_medium': new URLSearchParams(window.location.search).get('utm_medium') || '',
-                    'utm_campaign': new URLSearchParams(window.location.search).get('utm_campaign') || '',
-                    'instructor_name': INSTRUCTOR_NAME,
-                    'instructor_id': INSTRUCTOR_ID
-                });
-                
-                console.log('Ad source tracking:', {
-                    adSource: adSource,
-                    referrer: referrer,
-                    currentUrl: currentUrl,
-                    timestamp: new Date().toISOString()
-                });
-            }
-        }
         
     </script>
     <style>
@@ -559,19 +486,9 @@
             document.body.classList.add('loading');
 
             try {
-                // 폼 제출 시 광고 소스 추적
-                const adSource = getAdSource();
-                if (typeof dataLayer !== 'undefined') {
-                    dataLayer.push({
-                        'event': 'form_submit',
-                        'form_name': 'sattu_preregistration',
-                        'ad_source': adSource,
-                        'page_referrer': document.referrer || 'direct',
-                        'instructor_name': INSTRUCTOR_NAME,
-                        'instructor_id': INSTRUCTOR_ID
-                    });
-                }
-
+                // 이전 URL(리퍼러) 정보 수집
+                const referrer = document.referrer || 'direct';
+                
                 const formData = {
                     name: nameInput.value.trim(),
                     phone: normalizePhone(phoneInput.value.trim()),
@@ -579,7 +496,7 @@
                     instructorName: INSTRUCTOR_NAME,
                     instructorId: INSTRUCTOR_ID,
                     secret: SHARED_SECRET,
-                    adSource: adSource  // 서버로도 광고 소스 전송
+                    referrer: referrer  // 서버로 이전 URL 전송
                 };
 
                 // CORS 문제 해결을 위한 다중 접근 방식
@@ -805,9 +722,6 @@
             setTimeout(() => forceScrollToTop(), 100);
             setTimeout(() => forceScrollToTop(), 200);
             setTimeout(() => forceScrollToTop(), 500);
-            
-            // 광고 소스 추적
-            trackAdSource();
             
             await loadImages();
             
