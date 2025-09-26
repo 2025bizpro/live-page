@@ -28,15 +28,22 @@
         const INSTRUCTOR_NAME = "사뚜"; // 예: "캐시루트", "사뚜", "김메타강사"
         const INSTRUCTOR_ID = "sattu"; // 예: "cashroot", "sattu", "kimmeta"
         
-        // 페이지 로드 시점의 referrer 저장 (나중에 폼 제출 시 사용)
-        let initialReferrer = document.referrer || 'direct';
+        // 페이지 로드 시점에 즉시 referrer 캡처 (가장 중요!)
+        let initialReferrer = '';
         
-        // 페이지가 완전히 로드되기 전에도 한 번 더 확인
+        // 즉시 캡처 (이게 핵심이다)
+        if (document.referrer && document.referrer !== '') {
+            initialReferrer = document.referrer;
+        } else {
+            initialReferrer = 'direct';
+        }
+        
+        // 페이지 완전 로드 후 다시 한번 확인
         document.addEventListener('DOMContentLoaded', function() {
-            if (document.referrer) {
+            if (document.referrer && document.referrer !== '' && initialReferrer === 'direct') {
                 initialReferrer = document.referrer;
             }
-            console.log('Initial referrer captured:', initialReferrer);
+            console.log('Final referrer captured:', initialReferrer);
         });
         
     </script>
@@ -497,8 +504,8 @@
             document.body.classList.add('loading');
 
             try {
-                // 페이지 로드 시점에서 저장한 초기 referrer 사용
-                const finalReferrer = initialReferrer || document.referrer || 'direct';
+                // 페이지 로드 시점에서 저장한 초기 referrer 그대로 사용
+                const finalReferrer = initialReferrer || 'direct';
                 
                 console.log('Using referrer for form submission:', finalReferrer);
                 
@@ -509,7 +516,7 @@
                     instructorName: INSTRUCTOR_NAME,
                     instructorId: INSTRUCTOR_ID,
                     secret: SHARED_SECRET,
-                    referrer: finalReferrer  // 서버로 랜딩페이지 유입 시점의 이전 사이트 URL 전송
+                    referrer: finalReferrer  // 서버로 이전 사이트 URL 전송
                 };
 
                 // CORS 문제 해결을 위한 다중 접근 방식
