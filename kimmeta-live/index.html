@@ -14,6 +14,26 @@
         const INSTRUCTOR_NAME = "김메타강사"; // 예: "캐시루트", "사뚜", "김메타강사"
         const INSTRUCTOR_ID = "kimmeta"; // 예: "cashroot", "sattu", "kimmeta"
         
+        // URL 도메인에서 광고 소스 감지
+        function getAdSource() {
+            const hostname = window.location.hostname;
+            
+            // GDN 도메인 감지
+            if (hostname.includes('gdn')) {
+                return 'GDN';
+            }
+            // Meta 도메인 감지
+            else if (hostname.includes('meta')) {
+                return 'Meta';
+            }
+            
+            // 기본값
+            return 'Direct';
+        }
+        
+        // 페이지 로드 시 광고 소스 감지
+        let adSource = getAdSource();
+        
     </script>
     <style>
         /* 모바일 최적화 스타일 */
@@ -460,13 +480,18 @@
             document.body.classList.add('loading');
 
             try {
+                // 도메인에서 광고 소스 감지
+                const currentAdSource = getAdSource();
+                console.log('Ad Source:', currentAdSource);
+                
                 const formData = {
                     name: nameInput.value.trim(),
                     phone: normalizePhone(phoneInput.value.trim()),
                     consent: consentInput.checked,
                     instructorName: INSTRUCTOR_NAME,
                     instructorId: INSTRUCTOR_ID,
-                    secret: SHARED_SECRET
+                    secret: SHARED_SECRET,
+                    adsSource: currentAdSource
                 };
 
                 // CORS 문제 해결을 위한 다중 접근 방식
