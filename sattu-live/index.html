@@ -21,30 +21,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // 환경 변수 설정 (배포 시 실제 값으로 교체)
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyrVYnfSP2KDruKwdrSOMBJ0xzDM3NRtHc6l4W3ZnbwZDx6HZcTMvCcCcyZdeY-BkxuNQ/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxVn8B-Zth8ZeMpzVWKM9iqA6PCMWxOZ75JOu7OPLnZTqJUXk8pWOClo38VANju3goF5w/exec";
         const SHARED_SECRET = "frontend_backend_shared_secret";
         
         // 강사 정보 설정 (각 강사별로 수정 필요)
         const INSTRUCTOR_NAME = "사뚜"; // 예: "캐시루트", "사뚜", "김메타강사"
         const INSTRUCTOR_ID = "sattu"; // 예: "cashroot", "sattu", "kimmeta"
         
-        // 페이지 로드 시점에 즉시 referrer 캡처 (가장 중요!)
-        let initialReferrer = '';
-        
-        // 즉시 캡처 (이게 핵심이다)
-        if (document.referrer && document.referrer !== '') {
-            initialReferrer = document.referrer;
-        } else {
-            initialReferrer = 'direct';
+        // URL 도메인에서 광고 소스 감지
+        function getAdSource() {
+            const hostname = window.location.hostname;
+            
+            // GDN 도메인 감지
+            if (hostname.includes('gdn')) {
+                return 'GDN';
+            }
+            // Meta 도메인 감지
+            else if (hostname.includes('meta')) {
+                return 'Meta';
+            }
+            
+            // 기본값
+            return 'Direct';
         }
         
-        // 페이지 완전 로드 후 다시 한번 확인
-        document.addEventListener('DOMContentLoaded', function() {
-            if (document.referrer && document.referrer !== '' && initialReferrer === 'direct') {
-                initialReferrer = document.referrer;
-            }
-            console.log('Final referrer captured:', initialReferrer);
-        });
+        // 페이지 로드 시 광고 소스 감지
+        let adSource = getAdSource();
         
     </script>
     <style>
@@ -504,10 +506,9 @@
             document.body.classList.add('loading');
 
             try {
-                // 페이지 로드 시점에서 저장한 초기 referrer 그대로 사용
-                const finalReferrer = initialReferrer || 'direct';
-                
-                console.log('Using referrer for form submission:', finalReferrer);
+                // 도메인에서 광고 소스 감지
+                const currentAdSource = getAdSource();
+                console.log('Ad Source:', currentAdSource);
                 
                 const formData = {
                     name: nameInput.value.trim(),
@@ -516,7 +517,7 @@
                     instructorName: INSTRUCTOR_NAME,
                     instructorId: INSTRUCTOR_ID,
                     secret: SHARED_SECRET,
-                    referrer: finalReferrer  // 서버로 이전 사이트 URL 전송
+                    adsSource: currentAdSource
                 };
 
                 // CORS 문제 해결을 위한 다중 접근 방식
