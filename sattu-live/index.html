@@ -486,24 +486,11 @@
             document.body.classList.add('loading');
 
             try {
-                // 전체 URL 정보를 그대로 저장 (직접 방문이든 뭐든)
-                const currentUrl = window.location.href;
+                // 이전 URL 정보를 그대로 저장 (직접 방문이든 뭐든 이전 URL이 있으면 사용)
                 const documentReferrer = document.referrer;
                 
-                let finalReferrer;
-                
-                // document.referrer가 있으면 그것을 사용하고 현재 URL 파라미터도 추가
-                if (documentReferrer && documentReferrer !== '') {
-                    const urlParams = window.location.search;
-                    if (urlParams) {
-                        finalReferrer = `${documentReferrer}${urlParams}`;
-                    } else {
-                        finalReferrer = documentReferrer;
-                    }
-                } else {
-                    // 직접 방문이더라도 현재 전체 URL 사용
-                    finalReferrer = currentUrl;
-                }
+                // document.referrer가 있으면 그것을 그대로 사용하고, 없으면 'direct' 표시
+                const finalReferrer = documentReferrer || 'direct';
                 
                 const formData = {
                     name: nameInput.value.trim(),
@@ -512,7 +499,7 @@
                     instructorName: INSTRUCTOR_NAME,
                     instructorId: INSTRUCTOR_ID,
                     secret: SHARED_SECRET,
-                    referrer: finalReferrer  // 서버로 이전 URL 전송
+                    referrer: finalReferrer  // 서버로 이전 사이트 URL 전송
                 };
 
                 // CORS 문제 해결을 위한 다중 접근 방식
