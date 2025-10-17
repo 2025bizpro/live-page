@@ -533,7 +533,7 @@
 
                     if (result.ok) {
                         success = true;
-                        window.location.assign('./success.html');
+                        window.location.href('https://open.kakao.com/o/gvZhoZQh');
                     } else {
                         errorMessage = result.detail || '신청 중 오류가 발생했습니다.';
                     }
@@ -543,7 +543,7 @@
                     try {
                         success = await submitViaJsonp(formData);
                         if (success) {
-                            window.location.assign('./success.html');
+                            window.location.href('https://open.kakao.com/o/gvZhoZQh');
                         } else {
                             errorMessage = 'JSONP 방식으로도 전송에 실패했습니다.';
                         }
