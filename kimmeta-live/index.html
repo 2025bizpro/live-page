@@ -503,6 +503,103 @@
     </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-6 mt-8">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-bold mb-3 text-orange-400">비즈부스트</h3>
+                    <div class="text-sm text-gray-300 space-y-1">
+                        <p><strong>대표:</strong> 박선경</p>
+                        <p><strong>대표번호:</strong> 070-8080-4651</p>
+                        <p><strong>사업자등록번호:</strong> 769-06-03020</p>
+                        <p><strong>통신판매신고:</strong> 2025-경기김포-8059</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-3 text-orange-400">연락처 정보</h3>
+                    <div class="text-sm text-gray-300 space-y-1">
+                        <p><strong>주소:</strong> (10071) 경기 김포시 김포한강10로133번길 127</p>
+                        <p class="ml-4">(구래동) 디원시티지식산업센터</p>
+                        <p><strong>개인정보관리책임자:</strong> 박선경</p>
+                        <p><strong>이메일:</strong> 2024bizboost@gmail.com</p>
+                        <p><strong>고객센터:</strong> 카카오 채널톡</p>
+                        <p><strong>운영시간:</strong> 10:00 ~ 18:00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-600 mt-6 pt-4 text-center">
+                <p class="text-xs text-gray-400">
+                    ⓒ 2023. 비즈부스트. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 토스트 알림 -->
+    <div id="toast" class="toast hidden">
+        <div class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+
+    <!-- 개인정보취급방침 모달 -->
+    <div id="privacyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full max-h-96 overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">개인정보취급방침</h3>
+                        <button 
+                            id="closePrivacyModal"
+                            class="text-gray-500 hover:text-gray-700 text-xl"
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <div class="text-sm text-gray-700 space-y-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">가. 수집하는 개인정보 항목 및 수집방법</h4>
+                            <p class="mb-2">수집 항목: 이름, 전화번호</p>
+                            <p class="text-xs text-gray-500">수집 방법: 본 사전등록 폼을 통한 직접 수집</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">나. 개인정보의 수집 및 이용목적</h4>
+                            <p class="mb-2">수집한 개인정보를 다음의 목적을 위해 활용합니다:</p>
+                            <ul class="list-disc list-inside text-xs space-y-1">
+                                <li>무료 라이브 세션 일정 안내</li>
+                                <li>라이브 참여를 위한 개별 연락</li>
+                                <li>특별 혜택 및 추가 정보 제공</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">다. 수집한 개인정보의 보유 및 이용기간</h4>
+                            <p class="mb-2">- 라이브 세션 종료 후 30일간 보관</p>
+                            <p class="mb-2">- 목적 달성 후 즉시 파기</p>
+                            <p class="text-xs text-gray-500">※ 법령에 의해 보관이 필요한 경우 해당 기간 준수</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">라. 개인정보의 제3자 제공</h4>
+                            <p class="text-xs text-gray-500">개인정보는 수집 및 이용목적 달성을 위해 필요한 경우를 제외하고는 제3자에게 제공되지 않습니다.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">마. 개인정보 처리의 위탁</h4>
+                            <p class="text-xs text-gray-500">현재 개인정보 처리 위탁 업체는 없으며, 향후 위탁 시 본 방침을 통해 고지하겠습니다.</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <button 
+                            id="closePrivacyModalBtn"
+                            class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600"
+                        >
+                            확인
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 토스트 알림 -->
     <div id="toast" class="toast hidden">
         <div class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
