@@ -71,7 +71,7 @@
         .main-container {
             max-width: 800px;
             margin: 0 auto;
-            background-color: #ffffff;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             min-height: 100vh;
         }
         
@@ -146,23 +146,23 @@
         
         .floating-button a {
             display: block;
-            background: #F97316;
+            background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
             color: #fff;
             height: 60px;
             line-height: 60px;
-            border-radius: 8px;
+            border-radius: 12px;
             text-decoration: none;
             text-align: center;
             font-weight: bold;
             font-size: 16px;
-            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.3);
             transition: all 0.3s ease;
         }
         
         .floating-button a:hover {
-            background: #EA580C;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+            background: linear-gradient(135deg, #EA580C 0%, #DC2626 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(249, 115, 22, 0.4);
         }
         
         /* 모바일 반응형 */
@@ -206,9 +206,212 @@
             <!-- 이미지들이 동적으로 로드됩니다 -->
         </div>
 
+        <!-- 교육 콘텐츠 영역 -->
+        <div class="educational-content py-16 px-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">무료 라이브 특별 혜택</h2>
+                    <p class="text-lg text-gray-600">전문가와 함께하는 특별한 시간</p>
+                </div>
+                
+                <!-- <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-300">
+                        <h3 class="text-xl font-bold text-orange-600 mb-4">📚 이번 라이브에서 배울 내용</h3>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-2">✓</span>
+                                <span>메타 광고 마스터 클래스</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-2">✓</span>
+                                <span>고객 타겟팅 및 픽셀 설정</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-2">✓</span>
+                                <span>광고 크리에이티브 최적화</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 mr-2">✓</span>
+                                <span>ROI 극대화 전략</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-400">
+                        <h3 class="text-xl font-bold text-orange-500 mb-4">🎁 특별 혜택</h3>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex items-start">
+                                <span class="text-yellow-500 mr-2">🎯</span>
+                                <span>메타 광고 가이드북 제공</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-yellow-500 mr-2">🎯</span>
+                                <span>광고 템플릿 무료 제공</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-yellow-500 mr-2">🎯</span>
+                                <span>1:1 광고 상담 기회</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div> -->
+
+                <!-- 강사 소개
+                <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+                    <div class="flex flex-col md:flex-row items-start">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="w-48 h-48 mx-auto shadow-lg rounded-lg overflow-hidden bg-gray-100">
+                                <div class="w-full h-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white text-4xl font-bold">
+                                    김메타
+                                </div>
+                            </div> -->
+                            <!-- 오렌지색 성과 배너                          <div class="bg-orange-500 text-white rounded-lg p-4 mt-4 text-center">
+                                <div class="text-sm font-bold mb-2">주요 성과</div>
+                                <div class="text-xs space-y-1">
+                                    <div>• 메타 광고 전문가</div>
+                                    <div>• 광고 ROI 300% 달성</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 md:pl-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">김메타 강사를 소개합니다🔥</h3>
+                            <div class="text-gray-700 space-y-3">
+                                <p>
+                                    메타 광고 전문가 <strong>김메타</strong> 입니다.
+                                </p>
+                                <p>
+                                    <strong>메타 광고</strong> 분야에서 5년 이상의 경험을 바탕으로 
+                                    수많은 기업의 광고 성과를 극대화시켰습니다.
+                                </p>
+                                <p>
+                                    핵심은 <strong>'정확한 타겟팅'</strong>과 <strong>'크리에이티브 최적화'</strong>입니다. 
+                                    데이터 기반의 전략적 접근으로 
+                                    광고비 대비 <strong>ROI 300%</strong>를 달성합니다.
+                                </p>
+                                <p>
+                                    초보자도 쉽게 따라할 수 있는 단계별 메타 광고 마스터 과정을 통해 
+                                    누구나 성공적인 광고를 운영할 수 있도록 도와드립니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>  -->
+
+                <!-- 카운트다운 타이머 -->
+                <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 mb-12">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">무료 라이브까지 남은 시간</h3>
+                        <p class="text-gray-600 mb-8">2026년 1월 28일 오후 8시까지</p>
+                        <div id="countdown-timer" class="text-center">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-6 text-white">
+                                    <div id="days" class="text-3xl font-bold mb-1">00</div>
+                                    <div class="text-sm opacity-90">일</div>
+                                </div>
+                                <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-6 text-white">
+                                    <div id="hours" class="text-3xl font-bold mb-1">00</div>
+                                    <div class="text-sm opacity-90">시간</div>
+                                </div>
+                                <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-6 text-white">
+                                    <div id="minutes" class="text-3xl font-bold mb-1">00</div>
+                                    <div class="text-sm opacity-90">분</div>
+                                </div>
+                                <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-6 text-white">
+                                    <div id="seconds" class="text-3xl font-bold mb-1">00</div>
+                                    <div class="text-sm opacity-90">초</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 섹션 -->
+                <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 mb-12">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">자주 묻는 질문</h3>
+                        <p class="text-gray-600">궁금한 점들을 미리 확인해보세요</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-orange-500 bg-gray-50 rounded-r-lg p-6">
+                            <h4 class="font-semibold text-gray-900 mb-2">Q. 라이브는 정말 무료인가요?</h4>
+                            <p class="text-gray-700">네, 완전 무료입니다. 별도의 비용이나 구매 의무는 없습니다.</p>
+                        </div>
+                        <div class="border-l-4 border-orange-500 bg-gray-50 rounded-r-lg p-6">
+                            <h4 class="font-semibold text-gray-900 mb-2">Q. 초보자도 참여할 수 있나요?</h4>
+                            <p class="text-gray-700">물론입니다. 기초부터 차근차근 설명드리며, Q&A 시간도 있습니다.</p>
+                        </div>
+                        <div class="border-l-4 border-orange-500 bg-gray-50 rounded-r-lg p-6">
+                            <h4 class="font-semibold text-gray-900 mb-2">Q. 라이브 시간은 언제인가요?</h4>
+                            <p class="text-gray-700">무료라이브 신청하시면 전용 단톡방에서 라이브 일정을 안내해드립니다.</p>
+                        </div>
+                        <div class="border-l-4 border-orange-500 bg-gray-50 rounded-r-lg p-6">
+                            <h4 class="font-semibold text-gray-900 mb-2">Q. 개인정보는 안전한가요?</h4>
+                            <p class="text-gray-700">네, 수집된 정보는 라이브 알림 목적으로만 사용되며, 따로 저장하지 않습니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 교육 가치 섹션 -->
+                <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 mb-12">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">교육적 가치</h3>
+                        <p class="text-gray-600">실제로 도움이 되는 교육 내용</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl">
+                            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl">📈</span>
+                            </div>
+                            <h4 class="font-bold text-gray-900 mb-3">실전 구매대행 노하우</h4>
+                            <p class="text-sm text-gray-600">이론이 아닌 실제 구매대행에서 바로 적용할 수 있는 실전 노하우</p>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl">
+                            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl">💡</span>
+                            </div>
+                            <h4 class="font-bold text-gray-900 mb-3">전문가 인사이트</h4>
+                            <p class="text-sm text-gray-600">해외 구매대행 전문가가 공개하는 구매대행 전략</p>
+                        </div>
+                        <div class="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl">
+                            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl">🤝</span>
+                            </div>
+                            <h4 class="font-bold text-gray-900 mb-3">실시간 Q&A</h4>
+                            <p class="text-sm text-gray-600">실시간 Q&A 시간</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 폼 카드 영역 -->
         <div class="form-container" id="boxAll">
-            <h2 class="text-xl font-bold text-gray-800 mb-6 text-center">사전등록 정보 입력</h2>
+            <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-2xl p-8 mb-8 shadow-xl">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold mb-3">지금 바로 무료 등록하세요!</h2>
+                    <p class="text-lg opacity-90 mb-6">제한된 인원만 참여 가능한 특별 라이브 세션</p>
+                    <div class="flex justify-center items-center space-x-8">
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <span class="text-xl">⏰</span>
+                            </div>
+                            <div class="text-sm font-medium">제한된 시간</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <span class="text-xl">👥</span>
+                            </div>
+                            <div class="text-sm font-medium">소수 정예</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <span class="text-xl">🎁</span>
+                            </div>
+                            <div class="text-sm font-medium">특별 혜택</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <form id="registrationForm" class="space-y-4">
                 <!-- 이름 입력 -->
@@ -281,10 +484,10 @@
                 <button 
                     type="submit"
                     id="submitBtn"
-                    class="w-full text-white py-3 px-4 rounded-lg font-medium focus:ring-2 focus:ring-offset-2 transition-colors"
-                    style="display: none; min-height: 44px; background-color: #F97316;"
-                    onmouseover="this.style.backgroundColor='#EA580C'"
-                    onmouseout="this.style.backgroundColor='#F97316'"
+                    class="w-full text-white py-3 px-4 rounded-xl font-medium focus:ring-2 focus:ring-offset-2 transition-all duration-300"
+                    style="display: none; min-height: 44px; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);"
+                    onmouseover="this.style.background='linear-gradient(135deg, #EA580C 0%, #DC2626 100%)'"
+                    onmouseout="this.style.background='linear-gradient(135deg, #F97316 0%, #EA580C 100%)'"
                 >
                     무료라이브 신청하기
                 </button>
@@ -711,6 +914,45 @@
             }
         });
 
+        // 카운트다운 타이머 함수
+        function updateCountdown() {
+            // 시간 설정 (2025년 10월 28일 오후 8시)
+            const targetDate = new Date('2025-10-28T20:00:00+09:00');
+            const now = new Date();
+            
+            // 시간 차이 계산 (밀리초)
+            const timeDiff = targetDate.getTime() - now.getTime();
+            
+            if (timeDiff > 0) {
+                // 남은 시간 계산
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                
+                // DOM 요소 업데이트
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            } else {
+                // 시간이 지났을 경우
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                
+                // 타이머가 끝났음을 알리는 메시지
+                const timerContainer = document.getElementById('countdown-timer');
+                timerContainer.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-2xl font-bold mb-2">🎉 라이브가 시작되었습니다!</div>
+                        <p class="text-sm opacity-90">지금 바로 등록하세요!</p>
+                    </div>
+                `;
+            }
+        }
+
         // 강력한 스크롤 제어 함수
         function forceScrollToTop() {
             window.scrollTo(0, 0);
@@ -743,6 +985,10 @@
             // 이미지 로드 후에도 다시 확인
             forceScrollToTop();
             setTimeout(() => forceScrollToTop(), 100);
+            
+            // 카운트다운 타이머 초기화 및 시작
+            updateCountdown();
+            setInterval(updateCountdown, 1000); // 1초마다 업데이트
             
             nameInput.focus();
         });
